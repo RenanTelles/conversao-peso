@@ -5,6 +5,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /SRC
+COPY ["ConversaoPeso.sln", "."]
 COPY ["ConversaoPeso.Web/ConversaoPeso.Web.csproj", "ConversaoPeso.Web/"]
 RUN dotnet restore "ConversaoPeso.Web/ConversaoPeso.Web.csproj"
 COPY . .
