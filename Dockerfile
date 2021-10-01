@@ -11,10 +11,10 @@ RUN dotnet restore "ConversaoPeso.Web/ConversaoPeso.Web.csproj"
 
 COPY ConversaoPeso.Web/. ./ConversaoPeso.Web/
 WORKDIR "/src/ConversaoPeso.Web"
-RUN dotnet build "ConversaoPeso.Web.csproj" -c Release -o /app/build
+RUN dotnet build "ConversaoPeso.Web.csproj" -c release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ConversaoPeso.Web.csproj" -c Release /app/publish
+RUN dotnet publish "ConversaoPeso.Web.csproj" -c release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
