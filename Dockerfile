@@ -1,19 +1,20 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /source
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 as base
+WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
-# copy csproj and restore as distinct layers
-COPY ["ConversaoPeso.sln", "."]
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /SRC
 COPY ["ConversaoPeso.Web/ConversaoPeso.Web.csproj", "conversaopeso.web/"]
 RUN dotnet restore "conversaopeso.web/ConversaoPeso.Web.csproj"
+COPY . .
+WORKDIR "/src/ConversaoPeso.Web"
+RUN dotnet build "ConversaoPeso.Web.csproj" -c Release -o /app/build
 
-# copy everything else and build app
-COPY ConversaoPeso.Web/. ./conversaopeso.web/
-WORKDIR /source/conversaopeso.web
-RUN dotnet publish -c release -o /app --no-restore
+FROM build AS publish
+RUN dotnet publish "ConversaoPeso.Web.csproj" -c release /app/publish
 
-# final stage/image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM base AS final
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ConversaoPeso.Web.dll"]
