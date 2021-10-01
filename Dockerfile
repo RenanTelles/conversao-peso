@@ -8,7 +8,8 @@ WORKDIR /src
 COPY ["ConversaoPeso.sln", "."]
 COPY ["ConversaoPeso.Web/ConversaoPeso.Web.csproj", "ConversaoPeso.Web/"]
 RUN dotnet restore "ConversaoPeso.Web/ConversaoPeso.Web.csproj"
-COPY . .
+
+COPY ConversaoPeso.Web/. ./ConversaoPeso.Web/
 WORKDIR "/src/ConversaoPeso.Web"
 RUN dotnet build "ConversaoPeso.Web.csproj" -c Release -o /app/build
 
